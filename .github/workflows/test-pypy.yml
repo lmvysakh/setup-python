@@ -21,11 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
         pypy:
           - 'pypy-2.7'
           - 'pypy-3.10'
@@ -125,11 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
         pypy: ['pypy2.7', 'pypy3.9', 'pypy3.10-nightly', 'pypy3.11']
 
     steps:
@@ -154,11 +146,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
     steps:
       - uses: actions/checkout@v4
       - name: Setup PyPy and check latest
@@ -191,11 +179,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
     steps:
       - uses: actions/checkout@v4
       - name: Setup PyPy and check latest

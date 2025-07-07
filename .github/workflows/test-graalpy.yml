@@ -19,11 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
         graalpy:
           - 'graalpy-22.3'
           - 'graalpy-23.0'
@@ -70,11 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          [
-            macos-15, 
-            macos-15-arm64
-          ]
+        os: [macos-15, macos-15-arm64]
         graalpy: ['graalpy22.3', 'graalpy23.0', 'graalpy23.1', 'graalpy24.1']
 
     steps:
@@ -99,8 +91,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15, 
-            macos-15-arm64]
+        os: [macos-15, macos-15-arm64]
     steps:
       - uses: actions/checkout@v4
       - name: Setup GraalPy and check latest
