@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - check_12520
       - releases/*
     paths-ignore:
       - '**.md'
