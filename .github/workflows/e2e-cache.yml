@@ -23,13 +23,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version:
           [
@@ -63,13 +58,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version:
           ['3.10', 'pypy-3.10-v7.x', '3.11', 'pypy-3.11-v7.x', '3.12', '3.13']
@@ -120,13 +110,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version:
           [
@@ -161,13 +146,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version:
           [
@@ -202,13 +182,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version:
           ['3.10', 'pypy-3.10-v7.x', '3.11', 'pypy-3.11-v7.x', '3.12', '3.13']
@@ -258,13 +233,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
@@ -286,13 +256,8 @@ jobs:
       matrix:
         os:
           [
-            ubuntu-latest,
-            ubuntu-24.04-arm,
-            ubuntu-22.04,
-            ubuntu-22.04-arm,
-            windows-latest,
-            macos-latest,
-            macos-13
+            macos-15, 
+            macos-15-arm64
           ]
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
