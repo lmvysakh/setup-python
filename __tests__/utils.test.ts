@@ -283,7 +283,6 @@ describe('Version from file test', () => {
       expect(_fn(pythonVersionFilePath)).toEqual([]);
     }
   );
-
 });
 
 describe('getNextPageUrl', () => {

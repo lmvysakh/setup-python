@@ -241,7 +241,7 @@ jobs:
         uses: ./
         with:
           python-version-file: .tool-versions
-  
+
   setup-versions-from-pipfile-with-python_version:
     name: Setup ${{ matrix.python }} ${{ matrix.os }} Pipfile
     runs-on: ${{ matrix.os }}
