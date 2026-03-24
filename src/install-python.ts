@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as exec from '@actions/exec';
@@ -114,6 +115,36 @@ async function installPython(workingDirectory: string) {
   };
 
   if (IS_WINDOWS) {
+    const setupScript = path.join(workingDirectory, 'setup.ps1');
+    if (fs.existsSync(setupScript)) {
+      let content = fs.readFileSync(setupScript, 'utf8');
+
+      content = content.replace(
+        /cmd\.exe \/c "cd \$PythonArchPath && call \$PythonExecName/g,
+        'cmd.exe /c "cd `"$PythonArchPath`" && call `"$PythonExecName`"'
+      );
+
+      content = content.replace(
+        /cmd\.exe \/c "\$PythonExePath -m ensurepip && \$PythonExePath -m pip/g,
+        'cmd.exe /c "`"$PythonExePath`" -m ensurepip && `"$PythonExePath`" -m pip'
+      );
+
+      content = content.replace(
+        /"TARGETDIR=\$PythonArchPath ALLUSERS=1"/g,
+        '"TARGETDIR=`"$PythonArchPath`" ALLUSERS=1"'
+      );
+
+      content = content.replace(
+        /"DefaultAllUsersTargetDir=\$PythonArchPath InstallAllUsers=1/g,
+        '"DefaultAllUsersTargetDir=`"$PythonArchPath`" InstallAllUsers=1'
+      );
+
+      fs.writeFileSync(setupScript, content, 'utf8');
+      core.info(
+        'Patched setup.ps1 to handle spaces in tool cache path (actions/python-versions#378)'
+      );
+    }
+
     await exec.exec('powershell', ['./setup.ps1'], options);
   } else {
     await exec.exec('bash', ['./setup.sh'], options);
