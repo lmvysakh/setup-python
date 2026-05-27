@@ -55335,6 +55335,7 @@ async function getManifestFromURL() {
     return response.result;
 }
 async function installPython(workingDirectory) {
+    const stderrLines = [];
     const options = {
         cwd: workingDirectory,
         env: {
@@ -55347,15 +55348,27 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                core.error(data.toString().trim());
+                const line = data.toString().trim();
+                if (line) {
+                    stderrLines.push(line);
+                }
             }
         }
     };
+    let exitCode;
     if (utils_1.IS_WINDOWS) {
-        await exec.exec('powershell', ['./setup.ps1'], options);
+        exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
     }
     else {
-        await exec.exec('bash', ['./setup.sh'], options);
+        exitCode = await exec.exec('bash', ['./setup.sh'], options);
+    }
+    for (const line of stderrLines) {
+        if (exitCode !== 0) {
+            core.error(line);
+        }
+        else {
+            core.warning(line);
+        }
     }
 }
 async function installCpythonFromRelease(release) {

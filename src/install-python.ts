@@ -96,6 +96,7 @@ export async function getManifestFromURL(): Promise<tc.IToolRelease[]> {
 }
 
 async function installPython(workingDirectory: string) {
+  const stderrLines: string[] = [];
   const options: ExecOptions = {
     cwd: workingDirectory,
     env: {
@@ -108,15 +109,27 @@ async function installPython(workingDirectory: string) {
         core.info(data.toString().trim());
       },
       stderr: (data: Buffer) => {
-        core.error(data.toString().trim());
+        const line = data.toString().trim();
+        if (line) {
+          stderrLines.push(line);
+        }
       }
     }
   };
 
+  let exitCode: number;
   if (IS_WINDOWS) {
-    await exec.exec('powershell', ['./setup.ps1'], options);
+    exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
   } else {
-    await exec.exec('bash', ['./setup.sh'], options);
+    exitCode = await exec.exec('bash', ['./setup.sh'], options);
+  }
+
+  for (const line of stderrLines) {
+    if (exitCode !== 0) {
+      core.error(line);
+    } else {
+      core.warning(line);
+    }
   }
 }
 
