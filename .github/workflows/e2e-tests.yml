@@ -3,7 +3,7 @@ name: e2e tests
 on:
   push:
     branches:
-      - main
+      - sampl
     paths-ignore:
       - '**.md'
   pull_request:
