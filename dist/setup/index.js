@@ -55348,9 +55348,10 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                const trimmedLine = data.toString().trim();
-                if (trimmedLine) {
-                    stderrLines.push(trimmedLine);
+                const errMsg = data.toString().trim();
+                core.info(`The value of errMsg is : ${errMsg}`);
+                if (errMsg) {
+                    stderrLines.push(errMsg);
                 }
             }
         }
@@ -55358,16 +55359,18 @@ async function installPython(workingDirectory) {
     let exitCode;
     if (utils_1.IS_WINDOWS) {
         exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
+        core.info(`The value of exitCode inside windows code block is : ${exitCode}`);
     }
     else {
         exitCode = await exec.exec('bash', ['./setup.sh'], options);
+        core.info(`The value of exitCode inside non-windows code block is : ${exitCode}`);
     }
-    for (const bufferedLine of stderrLines) {
+    for (const line of stderrLines) {
         if (exitCode !== 0) {
-            core.error(bufferedLine);
+            core.error(line);
         }
         else {
-            core.warning(bufferedLine);
+            core.warning(line);
         }
     }
 }
