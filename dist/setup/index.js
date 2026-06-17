@@ -55348,9 +55348,9 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                const line = data.toString().trim();
-                if (line) {
-                    stderrLines.push(line);
+                const trimmedLine = data.toString().trim();
+                if (trimmedLine) {
+                    stderrLines.push(trimmedLine);
                 }
             }
         }
@@ -55362,12 +55362,12 @@ async function installPython(workingDirectory) {
     else {
         exitCode = await exec.exec('bash', ['./setup.sh'], options);
     }
-    for (const line of stderrLines) {
+    for (const bufferedLine of stderrLines) {
         if (exitCode !== 0) {
-            core.error(line);
+            core.error(bufferedLine);
         }
         else {
-            core.warning(line);
+            core.warning(bufferedLine);
         }
     }
 }
