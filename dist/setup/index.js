@@ -55348,19 +55348,26 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                const line = data.toString().trim();
-                if (line) {
-                    stderrLines.push(line);
+                const errMsg = data.toString().trim();
+                if (errMsg) {
+                    stderrLines.push(errMsg);
                 }
             }
         }
     };
-    let exitCode;
-    if (utils_1.IS_WINDOWS) {
-        exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
+    let exitCode = 0;
+    let execError = null;
+    try {
+        if (utils_1.IS_WINDOWS) {
+            exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
+        }
+        else {
+            exitCode = await exec.exec('bash', ['./setup.sh'], options);
+        }
     }
-    else {
-        exitCode = await exec.exec('bash', ['./setup.sh'], options);
+    catch (err) {
+        exitCode = 1;
+        execError = err instanceof Error ? err : new Error(String(err));
     }
     for (const line of stderrLines) {
         if (exitCode !== 0) {
@@ -55369,6 +55376,9 @@ async function installPython(workingDirectory) {
         else {
             core.warning(line);
         }
+    }
+    if (execError) {
+        throw execError;
     }
 }
 async function installCpythonFromRelease(release) {
