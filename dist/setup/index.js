@@ -55343,14 +55343,16 @@ async function installPython(workingDirectory) {
             ...(utils_1.IS_LINUX && { LD_LIBRARY_PATH: path.join(workingDirectory, 'lib') })
         },
         silent: true,
+        ignoreReturnCode: true,
         listeners: {
             stdout: (data) => {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                const line = data.toString().trim();
-                if (line) {
-                    stderrLines.push(line);
+                const errMsg = data.toString().trim();
+                core.info(`The value of errMsg is : ${errMsg}`);
+                if (errMsg) {
+                    stderrLines.push(errMsg);
                 }
             }
         }
@@ -55358,9 +55360,11 @@ async function installPython(workingDirectory) {
     let exitCode;
     if (utils_1.IS_WINDOWS) {
         exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
+        core.info(`The value of exitCode inside windows code block is : ${exitCode}`);
     }
     else {
         exitCode = await exec.exec('bash', ['./setup.sh'], options);
+        core.info(`The value of exitCode inside non-windows code block is : ${exitCode}`);
     }
     for (const line of stderrLines) {
         if (exitCode !== 0) {
@@ -55369,6 +55373,9 @@ async function installPython(workingDirectory) {
         else {
             core.warning(line);
         }
+    }
+    if (exitCode !== 0) {
+        throw new Error(`Python installation script failed with exit code ${exitCode}`);
     }
 }
 async function installCpythonFromRelease(release) {
