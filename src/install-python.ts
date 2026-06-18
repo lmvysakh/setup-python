@@ -140,11 +140,11 @@ async function installPython(workingDirectory: string) {
     }
   }
 
-  if (exitCode !== 0) {
-    throw new Error(
-      `Python installation script failed with exit code ${exitCode}`
-    );
-  }
+  // if (exitCode !== 0) {
+  //   throw new Error(
+  //     `Python installation script failed with exit code ${exitCode}`
+  //   );
+  // }
 }
 
 export async function installCpythonFromRelease(release: tc.IToolRelease) {

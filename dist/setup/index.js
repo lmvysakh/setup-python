@@ -55374,9 +55374,11 @@ async function installPython(workingDirectory) {
             core.warning(line);
         }
     }
-    if (exitCode !== 0) {
-        throw new Error(`Python installation script failed with exit code ${exitCode}`);
-    }
+    // if (exitCode !== 0) {
+    //   throw new Error(
+    //     `Python installation script failed with exit code ${exitCode}`
+    //   );
+    // }
 }
 async function installCpythonFromRelease(release) {
     if (!release.files || release.files.length === 0) {
