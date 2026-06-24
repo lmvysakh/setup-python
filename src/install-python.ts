@@ -104,6 +104,7 @@ async function installPython(workingDirectory: string) {
       ...(IS_LINUX && {LD_LIBRARY_PATH: path.join(workingDirectory, 'lib')})
     },
     silent: true,
+    ignoreReturnCode: true,
     listeners: {
       stdout: (data: Buffer) => {
         core.info(data.toString().trim());

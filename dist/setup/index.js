@@ -55343,6 +55343,7 @@ async function installPython(workingDirectory) {
             ...(utils_1.IS_LINUX && { LD_LIBRARY_PATH: path.join(workingDirectory, 'lib') })
         },
         silent: true,
+        ignoreReturnCode: true,
         listeners: {
             stdout: (data) => {
                 core.info(data.toString().trim());
