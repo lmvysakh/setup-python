@@ -181,6 +181,7 @@ export async function getManifestFromURL(): Promise<tc.IToolRelease[]> {
 }
 
 async function installPython(workingDirectory: string) {
+  const stderrLines: string[] = [];
   const options: ExecOptions = {
     cwd: workingDirectory,
     env: {
@@ -193,15 +194,45 @@ async function installPython(workingDirectory: string) {
         core.info(data.toString().trim());
       },
       stderr: (data: Buffer) => {
-        core.error(data.toString().trim());
+        const errMsg = data.toString().trim();
+        core.info(`The value of errMsg is : ${errMsg}`);
+        if (errMsg) {
+          stderrLines.push(errMsg);
+        }
       }
     }
   };
 
-  if (IS_WINDOWS) {
-    await exec.exec('powershell', ['./setup.ps1'], options);
-  } else {
-    await exec.exec('bash', ['./setup.sh'], options);
+  let exitCode = 0;
+  let execError: Error | null = null;
+
+  try {
+    if (IS_WINDOWS) {
+      exitCode = await exec.exec('powershell', ['./setup.ps1'], options);
+      core.info(
+        `The value of exitCode inside windows code block is : ${exitCode}`
+      );
+    } else {
+      exitCode = await exec.exec('bash', ['./setup.sh'], options);
+      core.info(
+        `The value of exitCode inside non-windows code block is : ${exitCode}`
+      );
+    }
+  } catch (err) {
+    exitCode = 1;
+    execError = err instanceof Error ? err : new Error(String(err));
+  }
+
+  for (const line of stderrLines) {
+    if (exitCode !== 0) {
+      core.error(line);
+    } else {
+      core.warning(line);
+    }
+  }
+
+  if (execError) {
+    throw execError;
   }
 }
 
