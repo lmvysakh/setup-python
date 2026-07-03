@@ -180,6 +180,12 @@ export async function getManifestFromURL(): Promise<tc.IToolRelease[]> {
   return response.result;
 }
 
+function isWarningMessage(msg: string): boolean {
+  const upperMsg = msg.toUpperCase();
+  const warningPatterns = ['WARNING:'];
+  return warningPatterns.some(pattern => upperMsg.includes(pattern));
+}
+
 async function installPython(workingDirectory: string) {
   const options: ExecOptions = {
     cwd: workingDirectory,
@@ -193,7 +199,12 @@ async function installPython(workingDirectory: string) {
         core.info(data.toString().trim());
       },
       stderr: (data: Buffer) => {
-        core.error(data.toString().trim());
+        const msg = data.toString().trim();
+        if (isWarningMessage(msg)) {
+          core.warning(msg);
+        } else {
+          core.error(msg);
+        }
       }
     }
   };

@@ -55746,6 +55746,11 @@ async function getManifestFromURL() {
     }
     return response.result;
 }
+function isWarningMessage(msg) {
+    const upperMsg = msg.toUpperCase();
+    const warningPatterns = ['WARNING:'];
+    return warningPatterns.some(pattern => upperMsg.includes(pattern));
+}
 async function installPython(workingDirectory) {
     const options = {
         cwd: workingDirectory,
@@ -55759,7 +55764,13 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                core.error(data.toString().trim());
+                const msg = data.toString().trim();
+                if (isWarningMessage(msg)) {
+                    core.warning(msg);
+                }
+                else {
+                    core.error(msg);
+                }
             }
         }
     };
