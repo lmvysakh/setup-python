@@ -55759,17 +55759,12 @@ async function installPython(workingDirectory) {
                 core.info(data.toString().trim());
             },
             stderr: (data) => {
-                const msgList = data.toString().split(/\r?\n/);
-                for (const msg of msgList) {
-                    const trimmedMsg = msg.trim();
-                    if (!trimmedMsg)
-                        continue;
-                    if (trimmedMsg.startsWith('WARNING:')) {
-                        core.warning(trimmedMsg);
-                    }
-                    else {
-                        core.error(trimmedMsg);
-                    }
+                const msg = data.toString().trim();
+                if (/^WARNING:/im.test(msg)) {
+                    core.warning(msg);
+                }
+                else {
+                    core.error(msg);
                 }
             }
         }
