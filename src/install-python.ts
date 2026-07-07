@@ -193,7 +193,14 @@ async function installPython(workingDirectory: string) {
         core.info(data.toString().trim());
       },
       stderr: (data: Buffer) => {
-        core.error(data.toString().trim());
+        const msg = data.toString().trim();
+        if (msg) {
+          if (/^WARNING:/im.test(msg)) {
+            core.warning(msg);
+          } else {
+            core.error(msg);
+          }
+        }
       }
     }
   };
