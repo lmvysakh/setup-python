@@ -75,6 +75,8 @@ describe('run', () => {
   let setFailedSpy: jest.Mock;
   let saveCacheSpy: jest.Mock;
   let getExecOutputSpy: jest.Mock;
+  let getInputSpy: jest.MockedFunction<typeof core.getInput>;
+  let getBooleanInputSpy: jest.MockedFunction<typeof core.getBooleanInput>;
 
   function setInput(name: string, value: string): void {
     process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] = value;
@@ -96,6 +98,31 @@ describe('run', () => {
 
     debugSpy = core.debug as jest.Mock;
     debugSpy.mockImplementation(() => undefined);
+
+    getInputSpy = core.getInput as jest.MockedFunction<typeof core.getInput>;
+    getInputSpy.mockImplementation((name: string) => {
+      const key = `INPUT_${name.replace(/ /g, '_').toUpperCase()}`;
+      return process.env[key] ?? '';
+    });
+
+    getBooleanInputSpy = core.getBooleanInput as jest.MockedFunction<
+      typeof core.getBooleanInput
+    >;
+    getBooleanInputSpy.mockImplementation((name: string) => {
+      const value = getInputSpy(name).toLowerCase();
+
+      if (value === 'true') {
+        return true;
+      }
+
+      if (value === 'false') {
+        return false;
+      }
+
+      throw new TypeError(
+        'Input does not meet YAML 1.2 "core schema" specification: support boolean input list: `true | True | TRUE | false | False | FALSE`'
+      );
+    });
 
     saveStateSpy = core.saveState as jest.Mock;
     saveStateSpy.mockImplementation(() => undefined);
